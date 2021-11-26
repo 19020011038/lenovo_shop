@@ -4,7 +4,7 @@
 
     <el-carousel :interval="4000" type="card" height="200px" style="background: #F2F8FE">
       <el-carousel-item v-for="item in imageList" :key="item.address">
-        <img :src="item.address">
+        <img :src="item.address" @click="goGoodsDesc(item.id)">
       </el-carousel-item>
     </el-carousel>
     <br>
