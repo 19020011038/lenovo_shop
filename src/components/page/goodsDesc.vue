@@ -153,7 +153,7 @@
         methods: {
           //数据更新
           getdate() {
-            axios.get(url_path + '/goods/' + this.goodsId + '/').then(res => {
+            axios.get(url_path + 'goods/' + this.goodsId + '/').then(res => {
               this.name = res.data.name;
               this.goods_brief = res.data.goods_brief;
               this.price = res.data.price;

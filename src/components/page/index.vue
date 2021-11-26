@@ -36,6 +36,8 @@
         <div style="float: left;width: 10%;background-color: #DCDFE6;">
           <!--左边栏空白占位  -->
         </div>
+
+        <h1></h1><br>
         <div style="float: left;width: 80%;">
               <div class="card"  v-for="(item, index) in goodsList" :key="item.id" v-on:mouseenter="showDialog(index)" v-on:mouseleave="hideDialog(index)">
                   <div class="ribbon">
@@ -54,20 +56,23 @@
                   <span>{{item.desc}}</span>
                 </div>
               </div>
+
+
         </div>
+
         <div style="float: left;width: 10%;background-color: #DCDFE6;">
           <!--右边栏空白占位  -->
         </div>
 
       </el-container>
       <br>
-      <center>
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :total="1000">
-        </el-pagination>
-      </center>
+<!--      <center>-->
+<!--        <el-pagination-->
+<!--          background-->
+<!--          layout="prev, pager, next"-->
+<!--          :total="1000">-->
+<!--        </el-pagination>-->
+<!--      </center>-->
     </div>
   </div>
 </template>
@@ -101,12 +106,6 @@
             {id:6,name:"小米电视4A 70英寸", img:"https://img11.360buyimg.com/n1/jfs/t1/130034/39/4685/156952/5f119f0fEd0d7d957/1eabe76b0f15b0d8.jpg",prize:"3499.00",desc:"小米旗舰店"},
             {id:7,name:"小米手环5 NFC版", img:"https://img11.360buyimg.com/n1/s450x450_jfs/t1/142719/12/444/104550/5ee1988cEd952bf51/74860b136a001168.jpg",prize:"229.00",desc:"小米旗舰店"},
             {id:8,name:"赛睿 西伯利亚 200", img:"https://img11.360buyimg.com/n1/s450x450_jfs/t1/111775/32/11694/132419/5f029811Ed7c79c8b/77d6e3870531b71b.jpg",prize:"319.00",desc:"赛睿旗舰店"},
-            {id:9,name:"雷蛇 Razer 萨诺狼蛛专业版", img:"https://img14.360buyimg.com/n1/s450x450_jfs/t1/113321/24/6567/313554/5ebb576cE79694dd8/d2012f7ebf9a8ec1.jpg",prize:"269.00",desc:"雷蛇官方旗舰店"},
-            {id:10,name:"佳能 EOS M50 微单相机", img:"https://img12.360buyimg.com/n1/s450x450_jfs/t19423/211/1066657577/92794/338e18b0/5abb0640Ndc7d364d.jpg",prize:"4799.00",desc:"佳能官方旗舰店"},
-            {id:11,name:"飞利浦猛腾 31.5英寸 2K曲面", img:"https://img14.360buyimg.com/n1/jfs/t1/143727/10/11420/254435/5f8f9e8bE1551aeda/3febf2c77d016b3e.jpg",prize:"1798.00",desc:"飞利浦显示器旗舰店"},
-            {id:12,name:"TP-LINK 5G 无线路由器", img:"https://img11.360buyimg.com/n1/s450x450_jfs/t1/114981/37/18201/64680/5f6af41bE4c1a5dad/53e06408e93a65eb.jpg",prize:"99.00",desc:"TP-LINK旗舰店"},
-            {id:13,name:"三星 27英寸 1800R曲面", img:"https://img10.360buyimg.com/n1/s450x450_jfs/t1/109252/8/3748/148356/5e1549c6Eb24b13ae/28e893cf441b6fc1.jpg",prize:"999.00",desc:"三星官方旗舰店"},
-
           ]
         };
       },
@@ -118,9 +117,9 @@
       methods:{
         getdate() {
           const list_temp = [];
-          axios.get(url_path + '/goodsimage/').then(res => {
-            for (let i = 0; i < res.data.length; i++) {
-              list_temp.push({"id":res.data.results[i].goods.goods_sn, "title":res.data.results[i].goods.name, "address":res.data.results[i].image_url})
+          axios.get(url_path + 'banner/').then(res => {
+            for (let i = 0; i < res.data.results.length; i++) {
+              list_temp.push({"id":res.data.results[i].goods.goods_sn, "title":res.data.results[i].goods.name, "address":res.data.results[i].image})
             }
             this.imageList = list_temp;
             console.log(res)
