@@ -148,8 +148,8 @@
           }
           this.goodsId = this.$route.query.goods;
           this.getdate();
-        }
-        ,
+        },
+
         methods: {
           //数据更新
           getdate() {
