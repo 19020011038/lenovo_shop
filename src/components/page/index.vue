@@ -73,6 +73,9 @@
 </template>
 
 <script>
+  import axios from "axios";
+  import url_path from "../../../config/url_path";
+
   export default {
       name: "index",
       data() {
@@ -107,7 +110,28 @@
           ]
         };
       },
+
+    created() {
+      this.getdate();
+    },
+
       methods:{
+        getdate() {
+          const list_temp = [];
+          axios.get(url_path + '/goodsimage/').then(res => {
+            for (let i = 0; i < res.data.length; i++) {
+              list_temp.push({"id":res.data.results[i].goods.goods_sn, "title":res.data.results[i].goods.name, "address":res.data.results[i].image_url})
+            }
+            this.imageList = list_temp;
+            console.log(res)
+
+          }).catch(err => {
+            this.$alert('获取失败，请检查网络！', '', {
+              confirmButtonText: '确定',
+            });
+            console.log(err);
+          })
+        },
         //前往商品详情页
         goGoodsDesc(goods) {
           this.$router.push({
