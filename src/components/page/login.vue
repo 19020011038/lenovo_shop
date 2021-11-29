@@ -1,17 +1,17 @@
 <template>
     <div class="login-wrap">
         <div class="ms-login">
-            <div class="ms-title">后台管理系统</div>
+            <div class="ms-title">登录</div>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
-                    <el-input v-model="param.username" placeholder="username">
+                    <el-input v-model="param.username" placeholder="请输入用户名">
                         <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                     <el-input
                         type="password"
-                        placeholder="password"
+                        placeholder="请输入密码"
                         v-model="param.password"
                         @keyup.enter.native="submitForm()"
                     >
@@ -29,12 +29,16 @@
 </template>
 
 <script>
+import axios from "axios";
+import url_path from "../../../config/url_path";
+import cookie from 'vue-cookies'
+
 export default {
     data: function() {
         return {
             param: {
-                username: 'admin',
-                password: '123123',
+                username: '',
+                password: '',
             },
             rules: {
                 username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
@@ -46,6 +50,19 @@ export default {
         submitForm() {
             this.$refs.login.validate(valid => {
                 if (valid) {
+
+                  axios.post(url_path + 'login/'+"?username="+this.param.username+"?password="+this.param.password).then(res => {
+                    console.log(res);
+                    this.cookie.set("username", this.param.username,7);
+                    this.cookie.set('token',res.data.token,7);
+                    localStorage.setItem("cookie", this.cookie);
+                  }).catch(err => {
+                    this.$alert('获取失败，请检查网络！', '', {
+                      confirmButtonText: '确定',
+                    });
+                    console.log(err);
+                  })
+
                     this.$message.success('登录成功');
                     localStorage.setItem('ms_username', this.param.username);
                     this.$router.push('/');

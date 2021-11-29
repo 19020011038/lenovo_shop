@@ -63,7 +63,7 @@
             <router-link to="/myOrders"><el-dropdown-item>我的订单</el-dropdown-item> </router-link>
             <router-link to="/userInfo"><el-dropdown-item>我的信息</el-dropdown-item> </router-link>
             <router-link to="/addressMag"><el-dropdown-item>地址管理</el-dropdown-item> </router-link>
-            <a href="https://github.com/zengxiaochao/hello-mall"><el-dropdown-item>Git仓库</el-dropdown-item> </a>
+<!--            <a href="https://github.com/zengxiaochao/hello-mall"><el-dropdown-item>Git仓库</el-dropdown-item> </a>-->
             <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
 <!--            <el-dropdown-item>退出登录</el-dropdown-item>-->
           </el-dropdown-menu>

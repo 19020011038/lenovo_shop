@@ -177,7 +177,6 @@ export default {
         for (let i = 0; i < this.category_list.length; i++) {
 
           axios.get(url_path + 'goodsOfcategory/'+"?category_name="+this.category_list[i].name).then(res => {
-            console.log("here we are")
             let temp_list = [];
             console.log(res.data.results.length)
             for (let j = 0; j < res.data.results.length && j < 5; j++) {
