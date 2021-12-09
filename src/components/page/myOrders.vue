@@ -129,12 +129,23 @@ import url_path from "../../../config/url_path";
       },
       goOrder(row, column, event)
       {
-        this.$router.push({
-          path:'/submitOrder',
-          query:{
-            orders_id:row.id
-          }
-        });
+        if(row.pay_status == "False") {
+          this.$router.push({
+            path: '/submitOrder',
+            query: {
+              orders_id: row.id
+            }
+          });
+        }
+        else
+        {
+          this.$router.push({
+            path:'/detailOrder',
+            query:{
+              order_id : row.id
+            }
+          })
+        }
       },
       objectSpanMethod({ row, column, rowIndex, columnIndex }) {
 

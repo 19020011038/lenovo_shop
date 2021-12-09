@@ -36,6 +36,11 @@ export default new Router({
           meta: { title: '我的收藏' }
         },
         {
+          path: '/detailOrder',
+          component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/detailOrder.vue'),
+          meta: {title: '订单详情'}
+        },
+        {
           path: '/myOrders',
           component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/myOrders.vue'),
           meta: { title: '我的订单' }
@@ -51,9 +56,19 @@ export default new Router({
           meta: { title: '提交订单' }
         },
         {
+          path: '/categoryDetail',
+          component: () => import(/* webpackChunkName: "403" */ '../components/page/categoryDetail.vue'),
+          meta: { title: 'categoryDetail' }
+        },
+        {
           path: '/userInfo',
           component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/userInfo.vue'),
           meta: { title: '个人信息' }
+        },
+        {
+          path: '/search',
+          component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/search.vue'),
+          meta: { title: '搜索商品' }
         },
         {
           path: '/addressMag',

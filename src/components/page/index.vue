@@ -1,7 +1,5 @@
 <template>
   <div>
-
-
     <el-carousel :interval="4000" type="card" height="200px" style="background: #F2F8FE">
       <el-carousel-item v-for="item in imageList":key="item.address">
         <img :src="item.address" @click="goGoodsDesc(item.id)">
@@ -15,31 +13,21 @@
       <!--      <el-cascader-panel :options="options" style="width: 19%;background: #F2F8FE;"></el-cascader-panel>-->
       <div style="float: left;width: 50%;">
         <el-input placeholder="查询商品" v-model="selectd" class="input-with-select" size="1000px">
-          <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-button slot="append" icon="el-icon-search" @click="getsearch()"></el-button>
         </el-input>
-        <p style="color: #BFBFBF;">
-          <span>热门搜索：</span>
-          <a href="">华为P40</a>
-          <a href="">海尔空调</a>
-          <a href="">海尔空调</a>
-          <a href="">海尔空调</a>
-          <a href="">海尔空调</a>
-          <a href="">惠普打印机</a>
-        </p>
-
       </div>
     </el-container>
 
     <br>
     <el-row v-for="cla in index_show_list" :key="cla.name">
-      <h1>{{ cla.name }}</h1><br>
+      <h1 @click="goCategoryDetail(cla.name)">{{ cla.name }}</h1><br>
       <div style="float: left;width: 80%;">
         <div class="card"  v-for="(item, index) in cla.list" :key="item.id" v-on:mouseenter="showDialog(item.goods_sn)" v-on:mouseleave="hideDialog()">
           <div class="ribbon">
             <!--鼠标移入移出事件-->
             <div class="handleDialog" v-if="item.goods_sn === show_id">
-              <el-button type="success" style="margin-left:25%;margin-top: 70%;" size="medium" @click="goGoodsDesc(item.goods_sn)">查看详情</el-button>
-              <el-button type="warning" icon="el-icon-star-off" circle size="medium"></el-button>
+              <el-button type="success" style="margin-left:30%;margin-top: 70%;" size="medium" @click="goGoodsDesc(item.goods_sn)">查看详情</el-button>
+<!--              <el-button type="warning" icon="el-icon-star-off" circle size="medium"></el-button>-->
             </div>
             <img :src="item.goods_front_image" style="height: 100%;width: 100%">
             <div class="wrap"><span class="ribbon6" style="color:#000;"><span style="color: #F2F8FE">双十一狂欢{{item.goods_sn}}号</span></span>
@@ -114,26 +102,6 @@ export default {
         {id:8,name:"赛睿 西伯利亚 200", img:"https://img11.360buyimg.com/n1/s450x450_jfs/t1/111775/32/11694/132419/5f029811Ed7c79c8b/77d6e3870531b71b.jpg",prize:"319.00",desc:"赛睿旗舰店"},
       ],
 
-      // index_show_list:[
-      //   {name:'hahaha', list:[
-      //       {id:1,name:"华为 HUAWEI Mate 40 Pro", img:"https://img13.360buyimg.com/n1/jfs/t1/127138/40/16031/89209/5f918b53E19746496/f0f235be5150056f.jpg",prize:"5999.00",desc:"华为官方旗舰店"},
-      //       {id:2,name:"荣耀Play4 Pro", img:"https://img13.360buyimg.com/n1/s450x450_jfs/t1/136135/36/11503/129859/5f769f36E0a120157/a7bddadf2b8ae6d8.jpg",prize:"2799.00 ",desc:"华为官方旗舰店"},
-      //       {id:3,name:"联想（Lenovo）YOGA 14s", img:"https://img10.360buyimg.com/n1/jfs/t1/122621/1/15816/121959/5f8ee259E2d2178c6/017ac237a18d2346.jpg",prize:"5766.00",desc:"联想官方旗舰店"},
-      //
-      //     ]},
-      //   {name:'xixixixiixix', list:[
-      //
-      //       {id:4,name:"Apple iPhone 11   128GB", img:"https://img12.360buyimg.com/n1/s450x450_jfs/t1/79668/22/9987/159271/5d780915Ebf9bf3f4/6a1b2703a9ed8737.jpg",prize:"5899.00",desc:"苹果官方旗舰店"},
-      //
-      //     ]},
-      //   {name:'caocaocaocaocao', list:[
-      //
-      //       {id:5,name:"小米Redmi红米k30 至尊纪念版", img:"https://img10.360buyimg.com/n1/s450x450_jfs/t1/138769/33/11422/181706/5f8fabbfE9d52ee11/47b690dbf2d4b147.jpg",prize:"2118.00",desc:"小米旗舰店"},
-      //       {id:6,name:"小米电视4A 70英寸", img:"https://img11.360buyimg.com/n1/jfs/t1/130034/39/4685/156952/5f119f0fEd0d7d957/1eabe76b0f15b0d8.jpg",prize:"3499.00",desc:"小米旗舰店"},
-      //       {id:7,name:"小米手环5 NFC版", img:"https://img11.360buyimg.com/n1/s450x450_jfs/t1/142719/12/444/104550/5ee1988cEd952bf51/74860b136a001168.jpg",prize:"229.00",desc:"小米旗舰店"},
-      //       {id:8,name:"赛睿 西伯利亚 200", img:"https://img11.360buyimg.com/n1/s450x450_jfs/t1/111775/32/11694/132419/5f029811Ed7c79c8b/77d6e3870531b71b.jpg",prize:"319.00",desc:"赛睿旗舰店"},
-      //     ]},
-      // ],
       index_show_list:[],
 
     };
@@ -144,6 +112,24 @@ export default {
   },
 
   methods:{
+    getsearch()
+    {
+      console.log(this.selectd);
+      this.$router.push({
+        path:'/search',
+        query:{
+          search:this.selectd,
+        }
+      });
+    },
+    goCategoryDetail(category_name){
+      this.$router.push({
+        path:'/categoryDetail',
+        query:{
+          category_name:category_name
+        }
+      });
+    },
     getdate() {
       //获取轮播图片
       const carousel_list = [];
