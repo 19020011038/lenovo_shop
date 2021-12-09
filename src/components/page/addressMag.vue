@@ -5,24 +5,18 @@
       <h1 style="font-size: 23px;color: #c91623;">收货地址管理</h1>
 
       <div style="width: 23%;float: left;margin-left: 20px;margin-bottom: 10px;"
-           v-for="(item, index) in userAddress"
-           @click="setFirst(index)">
+           v-for="(item, index) in address_lists"@click="setFirst(item)">
         <!--          地址卡片-->
         <el-card class="box-card">
-          <div slot="header" class="clearfix">
+          <div slot="header" class="clearfix" >
             <span>{{item.isFirst==1?"默认地址":"备用地址"}}</span>
 
-            <!--              设置默认按钮-->
-            <el-button style="float: right; padding: 3px 0"
-                       type="text"
-                       v-show="item.isFirst==1?false:true">
-              设置为默认
-            </el-button>
+
             <!--              删除按钮-->
             <el-button style="float: right; padding: 3px 0"
                        type="text"
-                       v-show="item.isFirst==1?false:true">
-              删除地址   |
+                       @click="remove_address(item.id)">
+              删除地址
             </el-button>
             <!--              选中标志-->
             <el-button style="float: right; padding: 3px 0"
@@ -31,13 +25,17 @@
             </el-button>
             <!--              地址具体信息-->
           </div>
-          <p>{{item.name}}</p>
-          <p>{{item.tel}}</p>
-          <p>{{item.loc}}</p>
-          <p>{{item.loc2}}</p>
+          <p>{{item.province}}</p>
+          <p>{{item.city}}</p>
+          <p>{{item.district}}</p>
+          <p>{{item.address}}</p>
+          <p>签收人：{{item.signer_name}}</p>
+          <p>联系方式:{{item.signer_mobile}}</p>
         </el-card>
       </div>
 <!--      添加按钮  -->
+
+
 
 
       <button class="addbtn2" @click="addVis=!addVis">
@@ -65,27 +63,27 @@
 
     <!-- 弹出添加框 -->
     <el-dialog title="添加地址" :visible.sync="addVis" width="30%">
-      <el-form ref="form" :model="form"  :rules="rules" label-width="95px">
-        <el-form-item label="收件人" prop="reseP"><el-input v-model="form.reseP"></el-input></el-form-item>
-        <el-form-item label="联系电话" prop="tel"><el-input v-model="form.tel"></el-input></el-form-item>
-        <el-form-item label="地址" prop="address">
-          <div class="block">
-            <span class="demonstration"></span>
-            <el-cascader
-              placeholder="地址"
-              v-model="form.address"
-              :options="options"
-              filterable></el-cascader>
-          </div>
-        </el-form-item>
-        <el-form-item label="详细地址" prop="address2"><el-input v-model="form.address2"></el-input></el-form-item>
-        <el-form-item label="备注"><el-input v-model="form.desc"></el-input></el-form-item>
+      <el-form ref="form" :model="form" :rules="rules" label-width="95px">
+        <el-form-item label="省" prop="address2" ><el-input v-model="form.province"></el-input></el-form-item>
+        <el-form-item label="市" prop="address2"><el-input v-model="form.city"></el-input></el-form-item>
+        <el-form-item label="区域" prop="address2"><el-input v-model="form.district"></el-input></el-form-item>
+        <el-form-item label="详细地址" prop="address2"><el-input v-model="form.address"></el-input></el-form-item>
+        <el-form-item label="收件人" prop="reseP"><el-input v-model="form.signer_name"></el-input></el-form-item>
+        <el-form-item label="联系电话" prop="tel"><el-input v-model="form.signer_mobile"></el-input></el-form-item>
+<!--          <div class="block">-->
+<!--            <span class="demonstration"></span>-->
+<!--            <el-cascader-->
+<!--              placeholder="地址"-->
+<!--              v-model="form.address"-->
+<!--              :options="options"-->
+<!--              filterable></el-cascader>-->
+<!--          </div>-->
       </el-form>
 
       <span slot="footer" class="dialog-footer">
                 <el-button @click="addVis = false">取 消</el-button>
                 <el-button @click="resetForm('form')">重 置</el-button>
-                <el-button type="primary" @click="saveAdd('form')">确 定</el-button>
+                <el-button type="primary" @click="add_address()">确 定</el-button>
             </span>
     </el-dialog>
 
@@ -93,6 +91,8 @@
 </template>
 
 <script>
+import axios from "axios";
+import url_path from "../../../config/url_path";
     export default {
         name: "addressMag",
       data()
@@ -100,7 +100,15 @@
         return {
           seen: 0,
           addVis: false,
-          form: {},
+          form: {
+            province:'',
+            city:'',
+            disrtict:'',
+            address:'',
+            signer_name:'',
+            signer_mobile:'',
+          },
+          address_lists:[],
           //数据
           userAddress: [{
             name: '光头强',
@@ -132,11 +140,12 @@
               { min: 11, max: 11, message: '', trigger: 'blur' }
             ],
             address: [
-              { required: true, message: '请选择地址', trigger: 'change' }
+              { required: true, message: '请输入地址', trigger: 'blur' },
+              { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
             ],
             address2: [
               { required: true, message: '请输入详细地址', trigger: 'blur' },
-              { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
+              { min: 1, max: 30, message: '长度在 1 到 30 个字符', trigger: 'blur' }
             ]
           },
           //地址选择
@@ -194,8 +203,68 @@
           }]
         }},
       created() {
+          this.getdate();
       },
       methods:{
+          add_address(){
+            axios.post(url_path+"address/",{
+              province: this.form.province,
+              city:this.form.city,
+              district:this.form.district,
+              address:this.form.address,
+              signer_name:this.form.signer_name,
+              signer_mobile:this.form.signer_mobile,
+            }).then(res=>{
+              if(res.status==201)
+              this.$alert('添加成功！', '', {
+                confirmButtonText: '确定',
+              });
+              // location.reload();
+              this.$router.go(0)
+            }).catch(error=>{
+              this.$alert('添加失败！', '', {
+                confirmButtonText: '确定',
+              });
+            })
+          },
+          remove_address(id)
+          {
+            axios.delete(url_path+"address/"+id+"/").then(res=>{
+              this.$alert('删除成功！', '', {
+                confirmButtonText: '确定',
+              });
+              // location.reload();
+              this.$router.go(0)
+            }).catch(error=>{
+              this.$alert('删除地址失败！', '', {
+                confirmButtonText: '确定',
+              });
+              console.log(error);
+            })
+
+          },
+
+          getdate()
+          {
+            const address_list = []
+            axios.get(url_path +'address/').then(res=>{
+              for (let i = 0; i< res.data.results.length;i++)
+              {
+                address_list.push({"id":res.data.results[i].id, "province":res.data.results[i].province,
+                  "city":res.data.results[i].city,"district":res.data.results[i].district,"address":res.data.results[i].address,
+                  "signer_name":res.data.results[i].signer_name,"signer_mobile":res.data.results[i].signer_mobile
+                });
+              }
+              this.address_lists = address_list;
+
+            }).catch(err => {
+                this.$alert('获取失败，请检查网络！', '', {
+                  confirmButtonText: '确定',
+                });
+                console.log(err);
+             })
+          },
+
         setFirst(index)
         {
           const length = this.userAddress.length;

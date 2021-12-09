@@ -37,17 +37,17 @@
             </router-link>
           </el-tooltip>
         </div>
-        <!-- 消息中心 -->
-        <div class="btn-bell">
-          <el-tooltip
-            effect="dark"
-            :content="message?`有${message}条未读消息`:`消息中心`"
-            placement="bottom">
-            <i class="el-icon-bell" @click="drawer = true"></i>
+<!--        &lt;!&ndash; 消息中心 &ndash;&gt;-->
+<!--        <div class="btn-bell">-->
+<!--          <el-tooltip-->
+<!--            effect="dark"-->
+<!--            :content="message?`有${message}条未读消息`:`消息中心`"-->
+<!--            placement="bottom">-->
+<!--            <i class="el-icon-bell" @click="drawer = true"></i>-->
 
-          </el-tooltip>
-          <span class="btn-bell-badge" v-if="message"></span>
-        </div>
+<!--          </el-tooltip>-->
+<!--          <span class="btn-bell-badge" v-if="message"></span>-->
+<!--        </div>-->
         <!-- 用户头像 -->
         <div class="user-avator">
           <img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2057588226,2402156864&fm=11&gp=0.jpg" />

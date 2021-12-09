@@ -28,6 +28,49 @@
           <el-input-number size="large" v-model="num" :min="1" :max="goods_num" @change="handleChange" label="商品数量"></el-input-number>
           <el-button size="medium" type="danger" @click="add1">加入购物车</el-button>
           <el-button size="medium" type="warning" @click="add2">收藏</el-button>
+
+
+          <el-button @click=buy() type="primary" style="margin-left: 16px;">
+            购买
+          </el-button>
+
+          <el-drawer
+            title="选择收货地址"
+            :visible.sync="drawer"
+            :direction="direction"
+            :before-close="handleClose" style="height: 200%">
+
+            <!--    地址-->
+            <div style="width: 90%;margin-left: 10%;">
+              <div style="width: 23%;float: left;margin-left: 20px;margin-bottom: 10px;"
+                   v-for="(item, index) in address_lists"
+                   @click="setFirst(index)">
+                <!--          地址卡片-->
+                <el-card class="box-card" :style="index==choose_num?'background: #F2F8FE':'background: #606266'">
+                  <div slot="header" class="clearfix">
+
+
+                    <!--              选中标志-->
+                    <el-button style="float: right; padding: 3px 0"
+                               type="success" icon="el-icon-check"
+                               v-show="index==choose_num?true:false">
+                    </el-button>
+                    <!--              地址具体信息-->
+                  </div>
+                  <p>{{item.province}}</p>
+                  <p>{{item.city}}</p>
+                  <p>{{item.district}}</p>
+                  <p>{{item.address}}</p>
+                  <p>签收人：{{item.signer_name}}</p>
+                  <p>联系方式:{{item.signer_mobile}}</p>
+                </el-card>
+              </div>
+            </div>
+
+            <el-button size="medium" @click="buy_sure">提交购买</el-button>
+<!--            <span>我来啦!</span>-->
+          </el-drawer>
+
           <p style="color: #777777">{{ ship_free_text }}</p>
           <p style="color: #777777">产品上线时间： {{ add_time }}</p>
         </div>
@@ -80,7 +123,30 @@
       <h1 style="color: #777777">商品详情</h1><br><br><br>
       <img :src="detail_image" style="height: 85%;width: 75%">
     </div>
+    <div>
+      <div class="title" style="width: 80%;margin-left: 10%;">
+        <h3>配置信息</h3>
+        <el-table
+          :data="settings"
+          style="width: 100%">
+          <el-table-column
+            prop="name"
+            label="配置名"
+            width="600">
+          </el-table-column>
+          <el-table-column
+            prop="info"
+            label="配置信息"
+            width="600">
+          </el-table-column>
+        </el-table>
+      </div>
+    </div>
+
+
   </div>
+
+
 
 
 </template>
@@ -109,15 +175,23 @@
             add_time: new Date().toLocaleDateString(),
             is_new:true,
             is_hot:true,
+            goods_id:'0',
             //分类
 
             ship_free_text:'该商品由用户承担运费',
             tag_text:'热销中', //右上角的图案中的文字
 
-
+            settings:[],
+            choose_num:0,
+            address_lists:[],
 
             num: 1,
+            order_mount:0.0,
 
+            drawer:false,
+            direction:'ttb',
+
+            order_id: 0,
 
             //隐形窗口
             ishow: false,
@@ -126,6 +200,7 @@
             //按钮点击限制
             add1_can_press : true,
             add2_can_press : true,
+            buy_can_press : true,
             err_can_press : true,
 
             //商品详情
@@ -148,12 +223,114 @@
           }
           this.goodsId = this.$route.query.goods;
           this.getdate();
+          this.getAddress();
         },
 
         methods: {
           //数据更新
+
+          buy_sure()
+          {
+            this.order_mount = this.num * this.price;
+
+            if(this.ship_free==true)
+            {
+              this.order_mount = this.order_mount + 10;
+            }
+
+            //提交订单
+            let address = this.address_lists[this.choose_num].province + this.address_lists[this.choose_num].city
+              + this.address_lists[this.choose_num].district + this.address_lists[this.choose_num].address;
+
+            let signer_name = this.address_lists[this.choose_num].signer_name;
+            let signer_mobile = this.address_lists[this.choose_num].signer_mobile;
+
+            axios.post(url_path+'orders/', {
+              pay_script:"暂无留言",
+              order_mount: this.order_mount,
+              address: address,
+              signer_name: signer_name,
+              signer_mobile:signer_mobile,
+              buy_only:true,
+            }).then(res=>{
+              if(res.status === 201)
+              {
+                this.order_id = res.data.id;
+
+
+                axios.post(url_path+'order_goods/', {
+                  order:this.order_id,
+                  goods:this.goods_id,
+                  goods_num:this.num,
+                }).then(res=>{
+                  if(res.status === 201)
+                  {
+                    this.$message('结算成功');
+                    this.drawer=false;
+                    this.$router.push({
+                      path:'/submitOrder',
+                      query:{
+                        orders_id:this.order_id,
+                      }
+                    });
+                  }
+                }).catch(error=>{
+                  this.$alert('提交订单商品失败！', '', {
+                    confirmButtonText: '确定',
+                  });
+                });
+
+              }
+            }).catch(error=>{
+              this.$alert('提交订单失败！', '', {
+                confirmButtonText: '确定',
+              });
+            });
+
+
+          },
+          getAddress(){
+            const address_list = []
+            axios.get(url_path +'address/').then(res=>{
+              for (let i = 0; i< res.data.results.length;i++)
+              {
+                address_list.push({"id":res.data.results[i].id, "province":res.data.results[i].province,
+                  "city":res.data.results[i].city,"district":res.data.results[i].district,"address":res.data.results[i].address,
+                  "signer_name":res.data.results[i].signer_name,"signer_mobile":res.data.results[i].signer_mobile
+                });
+              }
+              this.address_lists = address_list;
+
+            }).catch(err => {
+              this.$alert('获取失败，请检查网络！', '', {
+                confirmButtonText: '确定',
+              });
+              console.log(err);
+            })
+          },
+          setFirst(index)
+          {
+            this.choose_num = index;
+
+          },
+
+          handleClose(done) {
+            this.$confirm('确认关闭？')
+              .then(_ => {
+                done();
+              })
+              .catch(_ => {
+              });
+          },
+          buy(){
+            if(this.buy_can_press==true) {
+              this.drawer=true;
+            }
+          },
+
           getdate() {
             axios.get(url_path + 'goods/' + this.goodsId + '/').then(res => {
+              this.goods_id = res.data.id;
               this.name = res.data.name;
               this.goods_brief = res.data.goods_brief;
               this.price = res.data.price;
@@ -185,7 +362,28 @@
                 confirmButtonText: '确定',
               });
               console.log(err);
-            })
+            });
+            axios.get(url_path + 'settings/?goods_sn=' + this.goodsId ).then(res => {
+              //console.log(res);
+              const settings = [];
+              for(let i = 0 ;i < res.data.results.length;i++)
+              {
+                settings.push({
+                  "id":res.data.results[i].id,
+                  "setting_id":res.data.results[i].setting_id,
+                  "name":res.data.results[i].name,
+                  "info":res.data.results[i].info,
+                  "goods_sn":res.data.results[i].goods_sn,
+                })
+              }
+              this.settings = settings;
+            }).catch(err => {
+              this.$alert('获取失败，请检查网络！', '', {
+                confirmButtonText: '确定',
+              });
+              console.log(err);
+            });
+
           },
           //前往商品详情页
           goGoodsDesc(goods) {
@@ -197,6 +395,7 @@
             });
           },
           handleChange(value) {
+            console.log(this.num)
             this.money = value * this.prize;
             console.log(value);
           },
@@ -214,15 +413,27 @@
           add1() {
             if(this.add1_can_press==true)
             {
-              this.$notify({
-                title: '添加购物车',
-                message: '商品已添加到你的购物车',
-                type: 'success'
+
+              axios.post(url_path+"shopcarts/",{
+                goods:this.goods_id,
+                goods_num:this.num,
+              }).then(res=>{
+                this.$notify({
+                  title: '购物车',
+                  message: '加入购物车成功',
+                  type: 'success'
+                });
+                this.add2_can_press = false;
+                // setTimeout(()=>{
+                //   this.add2_can_press = true;
+                // },2000)
+                this.$router.go(0)
+              }).catch(error => {
+                this.$alert('加入购物车失败！', '', {
+                  confirmButtonText: '确定',
+                });
+                console.log(error);
               });
-              this.add1_can_press = false;
-              setTimeout(()=>{
-                this.add1_can_press = true;
-              },2000)
             }else if(this.err_can_press==true){
               this.$notify.error({
                 title: '错误',
@@ -238,16 +449,28 @@
           add2() {
             if(this.add2_can_press==true)
             {
-              this.$notify({
-                title: '收藏',
-                message: '收藏成功',
-                type: 'success'
+
+              axios.post(url_path+"userfavs/",{goods:this.goods_id}).then(res=>{
+                this.$notify({
+                  title: '收藏',
+                  message: '收藏成功',
+                  type: 'success'
+                });
+                this.add2_can_press = false;
+                // setTimeout(()=>{
+                //   this.add2_can_press = true;
+                // },2000)
+                this.$router.go(0)
+              }).catch(error => {
+                this.$alert('收藏失败！', '', {
+                  confirmButtonText: '确定',
+                });
+                console.log(error);
               });
-              this.add2_can_press = false;
-              setTimeout(()=>{
-                this.add2_can_press = true;
-              },2000)
-            }else if(this.err_can_press==true){
+
+
+            }
+            else if(this.err_can_press==true){
               this.$notify.error({
                 title: '错误',
                 message: '请求过于频繁，2秒后重试'

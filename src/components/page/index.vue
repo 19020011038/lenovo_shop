@@ -178,7 +178,7 @@ export default {
 
           axios.get(url_path + 'goodsOfcategory/'+"?category_name="+this.category_list[i].name).then(res => {
             let temp_list = [];
-            console.log(res.data.results.length)
+            //console.log(res.data.results.length)
             for (let j = 0; j < res.data.results.length && j < 5; j++) {
               temp_list.push(res.data.results[j])
             }
@@ -191,8 +191,8 @@ export default {
           })
         }
         this.index_show_list = index_show_list;
-        console.log('index_show_list')
-        console.log(this.index_show_list);
+        //console.log('index_show_list')
+        //console.log(this.index_show_list);
 
 
 

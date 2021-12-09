@@ -7,39 +7,40 @@
         ref="multipleTable"
         @row-click="goOrder"
         :span-method="objectSpanMethod"
-        :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+        :data="order_lists.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
         style="width: 100%;">
-        <el-table-column label="订单号" prop="name" align="center"></el-table-column>
-        <el-table-column label="订单金额" prop="name" align="center"></el-table-column>
-        <el-table-column label="订单状态" prop="name" align="center"></el-table-column>
-        <el-table-column label="下单时间" prop="name" align="center"></el-table-column>
-        <el-table-column label="支付时间" prop="name" align="center"></el-table-column>
+        <el-table-column label="订单号" prop="name" align="center">
+          <template slot-scope="scope">
+            {{scope.row.order_sn}}
+          </template>
+        </el-table-column>
+        <el-table-column label="订单金额" prop="name" align="center">
+          <template slot-scope="scope">
+            <span>&yen;</span>{{scope.row.order_mount}}
+          </template>
+        </el-table-column>
+
+
+        <el-table-column label="订单留言" prop="name" align="center">
+          <template slot-scope="scope">
+            <span></span>{{scope.row.pay_script}}
+          </template>
+        </el-table-column>
+
+
         <!--        上下架状态-->
         <el-table-column label="状态"  prop="prize" width="110px" align="center">
           <template slot-scope="scope">
-            <el-tag :type="orderStatus(scope.row.status)">{{scope.row.status==1?"未支付":"已支付"}}</el-tag>
+            <el-tag :type="orderStatus(scope.row.pay_status)">{{scope.row.pay_status=="False"?"未支付":"已支付"}}</el-tag>
           </template>
         </el-table-column>
-        <!--        商品图片-->
-        <el-table-column label="商品" prop="img" width="110px" align="center">
-          <template slot-scope="scope">
-            <el-image style="width: 100px; height: 100px;" :src="scope.row.img"/>
-          </template>
-        </el-table-column>
-        <!--        商品名字-->
-        <el-table-column label="商品名" prop="name" align="center"></el-table-column>
-        <!--        商品单价-->
-        <el-table-column label="单价"  prop="prize" width="110px" align="center">
-          <template slot-scope="scope">
-            <span>&yen;</span>{{scope.row.price}}
-          </template>
-        </el-table-column>
+
         <!--        商品数量-->
-        <el-table-column label="数量"  prop="prize" width="110px" align="center">
-          <template slot-scope="scope">
-            <span>&yen;</span>{{scope.row.price}}
-          </template>
-        </el-table-column>
+<!--        <el-table-column label="数量"  prop="prize" width="110px" align="center">-->
+<!--          <template slot-scope="scope">-->
+<!--            <span>&yen;</span>{{scope.row.order_mount}}-->
+<!--          </template>-->
+<!--        </el-table-column>-->
 
       </el-table>
     </div>
@@ -50,11 +51,14 @@
 </template>
 
 <script>
+import axios from "axios";
+import url_path from "../../../config/url_path";
   export default {
     name: "myOrders",
     data()
     {
       return{
+        order_lists:[],
         tableData: [{
           name: '华为P40 Pro',
           price:5988.00,
@@ -84,21 +88,51 @@
       }
     },
     created() {
+      this.getdate();
     },
     methods:{
+      getdate() {
+        const order_lists = []
+        axios.get(url_path + 'orders/').then(res => {
+          //console.log(res)
+          for (let i = 0; i < res.data.results.length; i++) {
+            order_lists.push({
+              "id": res.data.results[i].id,
+              "pay_status": res.data.results[i].pay_status,
+              "trade_no": res.data.results[i].trade_no,
+              "order_sn": res.data.results[i].order_sn,
+              "pay_time": res.data.results[i].pay_time,
+              "alipay_url": res.data.results[i].alipay_url,
+              "pay_script": res.data.results[i].pay_script,
+              "order_mount": res.data.results[i].order_mount,
+              "address": res.data.results[i].address,
+              "signer_name": res.data.results[i].signer_name,
+              "signer_mobile": res.data.results[i].signer_mobile,
+            });
+          }
+          this.order_lists = order_lists
+
+        }).catch(err => {
+          this.$alert('获取失败，请检查网络！', '', {
+            confirmButtonText: '确定',
+          });
+          console.log(err);
+        })
+      },
+
       orderStatus(status)
       {
-        if(status=="1")
-          return "danger";
-        else if(status=="2")
-          return "";
+        if(status=="False")
+          return "warning";
+        else if(status=="True")
+          return "success";
       },
       goOrder(row, column, event)
       {
         this.$router.push({
           path:'/submitOrder',
           query:{
-            goods:row
+            orders_id:row.id
           }
         });
       },
