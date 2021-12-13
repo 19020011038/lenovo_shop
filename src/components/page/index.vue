@@ -21,7 +21,7 @@
     </el-container>
 
     <br>
-    <el-container>
+
 
     <el-row v-for="cla in index_show_list" :key="cla.name">
 
@@ -42,13 +42,12 @@
           <div style="text-align:center">
             <span>{{item.name}}</span>
             <span>&yen;{{item.price}}</span>
-            <span>{{item.goods_brief}}</span>
+<!--            <span>{{item.goods_brief}}</span>-->
           </div>
 
         </div>
       </div>
     </el-row>
-    </el-container>
 
     <div>
       <el-container >
@@ -179,6 +178,7 @@ export default {
 
           axios.get(url_path + 'goodsOfcategory/'+"?category_name="+this.category_list[i].name).then(res => {
             let temp_list = [];
+            console.log(res);
             //console.log(res.data.results.length)
             for (let j = 0; j < res.data.results.length && j < 5; j++) {
               temp_list.push(res.data.results[j])
