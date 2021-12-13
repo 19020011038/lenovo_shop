@@ -12,6 +12,8 @@ import './assets/css/icon.css';
 
 
 import Axios from 'axios';
+import VueParticles from 'vue-particles'
+Vue.use(VueParticles)
 // Vue.prototype.$http = Axios
 // //定义全局默认配置
 // // axios.defaults.headers.common['Authentication'] = store.state.token;

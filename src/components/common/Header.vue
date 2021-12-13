@@ -49,9 +49,13 @@
 <!--          <span class="btn-bell-badge" v-if="message"></span>-->
 <!--        </div>-->
         <!-- 用户头像 -->
-        <div class="user-avator">
-          <img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2057588226,2402156864&fm=11&gp=0.jpg" />
-        </div>
+        <el-row class="demo-avatar demo-basic">
+          <el-col :span="12">
+            <div class="demo-basic--circle">
+              <div class="block"><el-avatar :size="25" :src="circleUrl"></el-avatar></div>
+            </div>
+          </el-col>
+        </el-row>
 
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" @command="handleCommand">
@@ -60,11 +64,12 @@
                         <i class="el-icon-caret-bottom"></i>
                     </span>
           <el-dropdown-menu slot="dropdown">
-            <router-link to="/myOrders"><el-dropdown-item>我的订单</el-dropdown-item> </router-link>
-            <router-link to="/userInfo"><el-dropdown-item>我的信息</el-dropdown-item> </router-link>
-            <router-link to="/addressMag"><el-dropdown-item>地址管理</el-dropdown-item> </router-link>
+
+            <router-link to="/myOrders" v-if="this.islogin=='True'"><el-dropdown-item>我的订单</el-dropdown-item> </router-link>
+            <router-link to="/userInfo" v-if="this.islogin=='True'"><el-dropdown-item>我的信息</el-dropdown-item> </router-link>
+            <router-link to="/addressMag" v-if="this.islogin=='True'"><el-dropdown-item>地址管理</el-dropdown-item> </router-link>
 <!--            <a href="https://github.com/zengxiaochao/hello-mall"><el-dropdown-item>Git仓库</el-dropdown-item> </a>-->
-            <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+            <el-dropdown-item divided command="loginout">{{this.islogin=='True'?"退出登录":"登录/注册"}}</el-dropdown-item>
 <!--            <el-dropdown-item>退出登录</el-dropdown-item>-->
           </el-dropdown-menu>
         </el-dropdown>
@@ -98,24 +103,33 @@
   export default {
     data() {
       return {
+        circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+        squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+        sizeList: ["small"],
         collapse: false,
         fullscreen: false,
-        name: '金刚葫芦娃',
+        name: '游客',
+        islogin:'False',
         message: 2,
         drawer: false,
       };
     },
+
     computed: {
       username() {
-        let username = localStorage.getItem('ms_username');
+        let username = localStorage.getItem('username');
+        if(username)this.islogin='True';
         return username ? username : this.name;
       }
     },
     methods: {
       // 用户名下拉菜单选择事件
       handleCommand(command) {
+
         if (command == 'loginout') {
-          localStorage.removeItem('ms_username');
+          localStorage.removeItem('username');
+          localStorage.removeItem("token" );
+          this.islogin = 'False';
           this.$router.push('/login');
         }
       },

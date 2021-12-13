@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>至渝的个人简历</title>
+</head>
+
+<link href="logo.ico" rel="shortcut icon" />
+<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script> <!-- 用来实现鼠标点击特效-->
+
+
+
+<body>
+
+
+<!-- 实现鼠标移动特效 -->
+<canvas id="stage1" class="stage"></canvas>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/canvas.js"></script>
+<!-- 实现鼠标移动特效 -->
+
+
+
+<div class='bg'>
+  <div style="height: 70px;">
+    <p></p>
+  </div>
+  <div class="container">
+    <table>
+
+
+
+    </table>
+  </div>
+  <div style="height: 380px;">
+    <p> </p>
+  </div>
+  <div class="w_foot">
+    <div class="w_foot_copyright">
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+  /* 鼠标点击文字特效 */
+  var font = new Array("富强", "民主", "文明", "和谐", "自由", "平等", "公正", "法治", "爱国", "敬业", "诚信", "友善");
+  var color = new Array('#ff0000', '#eb4310', '#f6941d', '#fbb417', '#ffff00', '#cdd541', '#99cc33', '#3f9337', '#219167', '#239676', '#24998d', '#1f9baa', '#0080ff', '#3366cc', '#333399', '#003366', '#800080', '#a1488e', '#c71585', '#bd2158', '#eec142', '#FEEE6D');
+  var f_idx = Math.floor(Math.random() * 20) % font.length;
+  var f_idx1 = Math.floor(Math.random() * 20) % font.length;
+  var c_idx = Math.floor(Math.random() * 40) % font.length;
+  jQuery(document).ready(function ($) {
+    $("body").click(function (e) {
+
+      var $i = $("<span />").text(font[f_idx] + ' ' + font[f_idx1]);
+      f_idx = Math.floor(Math.random() * 20) % font.length;
+      f_idx1 = Math.floor(Math.random() * 20) % font.length;
+      c_idx = Math.floor(Math.random() * 40) % color.length;
+      var x = e.pageX,
+        y = e.pageY;
+      $i.css({
+        "z-index": 9999999999999999999999999,
+        "top": y - 20,
+        "left": x,
+        "position": "absolute",
+        "font-weight": "bold",
+        "color": color[c_idx]
+      });
+      $("body").append($i);
+      $i.animate({
+          "top": y - 180,
+          "opacity": 0
+        },
+        1500,
+        function () {
+          $i.remove();
+        });
+    });
+  });
+</script>
+</body>
+
+</html>

@@ -118,30 +118,41 @@
 <!--    </div>-->
 
 <!--    详情图片-->
-    <div class="goodsDescImg" id="goodsDescImg" style="text-align: center;margin-top: 50px">
-      <hr />
-      <h1 style="color: #777777">商品详情</h1><br><br><br>
-      <img :src="detail_image" style="height: 85%;width: 75%">
-    </div>
-    <div>
-      <div class="title" style="width: 80%;margin-left: 10%;">
-        <h3>配置信息</h3>
-        <el-table
-          :data="settings"
-          style="width: 100%">
-          <el-table-column
-            prop="name"
-            label="配置名"
-            width="600">
-          </el-table-column>
-          <el-table-column
-            prop="info"
-            label="配置信息"
-            width="600">
-          </el-table-column>
-        </el-table>
-      </div>
-    </div>
+
+    <el-tabs v-model="activeName" type="card" @tab-click="handleClick" style="margin-left: 5%" >
+      <el-tab-pane label="商品详情" name="first" >
+        <div class="goodsDescImg" id="goodsDescImg" style="text-align: center;margin-top: 50px">
+          <hr />
+          <h1 style="color: #777777">商品详情</h1><br><br><br>
+          <img :src="detail_image" style="height: 85%;width: 75%">
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="配置详情" name="second">
+        <div>
+          <div class="title" style="width: 80%;margin-left: 10%;">
+            <h3>配置信息</h3>
+            <el-table
+              :data="settings"
+              style="width: 100%">
+              <el-table-column
+                prop="name"
+                label="配置名"
+                width="600">
+              </el-table-column>
+              <el-table-column
+                prop="info"
+                label="配置信息"
+                width="600">
+              </el-table-column>
+            </el-table>
+          </div>
+        </div>
+      </el-tab-pane>
+
+    </el-tabs>
+
+
+
 
 
   </div>
@@ -160,6 +171,7 @@
         name: "goodsDesc",
         data() {
           return {
+            activeName: 'second',
             name:'联想小新',
             goods_brief:'这是一款笔记本',
             price:123.00,
@@ -228,7 +240,9 @@
 
         methods: {
           //数据更新
-
+          handleClick(tab, event) {
+            console.log(tab, event);
+          },
           buy_sure()
           {
             this.order_mount = this.num * this.price;

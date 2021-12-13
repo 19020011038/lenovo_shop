@@ -1,5 +1,7 @@
 <template>
   <div>
+
+
     <el-carousel :interval="4000" type="card" height="200px" style="background: #F2F8FE">
       <el-carousel-item v-for="item in imageList":key="item.address">
         <img :src="item.address" @click="goGoodsDesc(item.id)">
@@ -19,8 +21,12 @@
     </el-container>
 
     <br>
+    <el-container>
+
     <el-row v-for="cla in index_show_list" :key="cla.name">
-      <h1 @click="goCategoryDetail(cla.name)">{{ cla.name }}</h1><br>
+
+      <el-tag @click="goCategoryDetail(cla.name)" style="text-align: center">{{ cla.name }}</el-tag><br>
+
       <div style="float: left;width: 80%;">
         <div class="card"  v-for="(item, index) in cla.list" :key="item.id" v-on:mouseenter="showDialog(item.goods_sn)" v-on:mouseleave="hideDialog()">
           <div class="ribbon">
@@ -38,9 +44,11 @@
             <span>&yen;{{item.price}}</span>
             <span>{{item.goods_brief}}</span>
           </div>
+
         </div>
       </div>
     </el-row>
+    </el-container>
 
     <div>
       <el-container >
@@ -63,10 +71,17 @@
       <!--        </el-pagination>-->
       <!--      </center>-->
     </div>
+
+
   </div>
 </template>
 
 <script>
+
+
+
+
+
 import axios from "axios";
 import url_path from "../../../config/url_path";
 
@@ -209,7 +224,11 @@ export default {
     //隐藏蒙层
     hideDialog() {
       this.show_id = -1;
-    }
+    },
+
+
+
+
   }
 }
 </script>
@@ -273,6 +292,7 @@ export default {
   text-transform: uppercase;
   color: white;
 }
+
 
 .wrap {
   width: 100%;
