@@ -3,6 +3,7 @@
     <div >
       <div style="position: absolute;right: 7%;bottom: 10%;">
         <el-tooltip class="item" effect="dark" content="返回顶层" placement="left-start">
+          <el-backtop target=".item"></el-backtop>
           <el-button size="medium" @click="goTop()" icon="el-icon-arrow-up" circle></el-button>
         </el-tooltip>
         <br><br>

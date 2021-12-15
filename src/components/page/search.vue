@@ -21,7 +21,6 @@
         <div style="text-align:center">
           <span>{{ item.name }}</span>
           <span>&yen;{{ item.price }}</span>
-          <span>{{ item.goods_brief }}</span>
         </div>
       </div>
     </div>
