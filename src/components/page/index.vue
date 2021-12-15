@@ -82,6 +82,7 @@
 
 
   </div>
+
 </template>
 
 <script>
@@ -162,7 +163,7 @@ export default {
         }
         this.imageList = carousel_list;
       }).catch(err => {
-        this.$alert('获取失败，请检查网络！', '', {
+        this.$alert('获取轮播图片失败，请检查网络！', '', {
           confirmButtonText: '确定',
         });
         console.log(err);
