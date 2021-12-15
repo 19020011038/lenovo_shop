@@ -3,14 +3,18 @@
 <div>
 
 <el-container>
-  <h1>{{this.category_name}}</h1>
+  <el-header>
+  <el-tag  style="margin-left:50px;margin-top: 70px" size="700px">{{ this.category_name }}</el-tag><br>
+<!--  <h1>{{this.category_name}}</h1>-->
+  </el-header>
+  <el-main>
   <div style="float: left;width: 80%;">
     <div class="card" v-for="(item, index) in tableData" :key="item.id" v-on:mouseenter="showDialog(item.goods_sn)"
          v-on:mouseleave="hideDialog()">
       <div class="ribbon">
         <!--鼠标移入移出事件-->
         <div class="handleDialog" v-if="item.goods_sn === show_id">
-          <el-button type="success" style="margin-left:30%;margin-top: 70%;" size="medium"
+          <el-button type="success" style="margin-left:30%;margin-top: 70px;" size="medium"
                      @click="goGoodsDesc(item.goods_sn)">查看详情
           </el-button>
 <!--          <el-button type="warning" icon="el-icon-star-off" circle size="medium"></el-button>-->
@@ -26,6 +30,8 @@
       </div>
     </div>
   </div>
+  </el-main>
+  <el-footer></el-footer>
 </el-container>
 </div>
 

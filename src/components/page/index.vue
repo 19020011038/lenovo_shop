@@ -23,9 +23,13 @@
     <br>
 
 
+    <el-container>
+      <el-header>
+      </el-header>
     <el-row v-for="cla in index_show_list" :key="cla.name">
 
-      <el-tag @click="goCategoryDetail(cla.name)" style="text-align: center">{{ cla.name }}</el-tag><br>
+
+      <el-tag @click="goCategoryDetail(cla.name)" style="margin-left:50px;margin-top: 70px" size="700px" v-on:mouseenter="showDialog(cla.name)" v-on:mouseleave="hideDialog()">{{ cla.name }}</el-tag><br>
 
       <div style="float: left;width: 80%;">
         <div class="card"  v-for="(item, index) in cla.list" :key="item.id" v-on:mouseenter="showDialog(item.goods_sn)" v-on:mouseleave="hideDialog()">
@@ -47,7 +51,12 @@
 
         </div>
       </div>
+      <br><br>
     </el-row>
+      <br><br>
+      <el-footer></el-footer>
+
+    </el-container>
 
     <div>
       <el-container >
@@ -180,7 +189,7 @@ export default {
             let temp_list = [];
             console.log(res);
             //console.log(res.data.results.length)
-            for (let j = 0; j < res.data.results.length && j < 5; j++) {
+            for (let j = 0; j < res.data.results.length && j < 8; j++) {
               temp_list.push(res.data.results[j])
             }
             index_show_list.push({"name":this.category_list[i].name, "list":temp_list});
