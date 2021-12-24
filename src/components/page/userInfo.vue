@@ -44,7 +44,6 @@
       <el-form-item>
         <el-button type="primary" @click="onSubmit" v-show="!editable">提交修改</el-button>
         <el-button type="primary" @click="editabled" v-show="editable">修改个人信息</el-button>
-        <el-button type="primary" @click="editPwd" v-show="editable">修改密码</el-button>
       </el-form-item>
     </el-form>
   </div>

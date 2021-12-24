@@ -1,8 +1,8 @@
 <template>
 
-  <div style="margin-top:20px;background: url(../../../static/register/paste2.jpg)  no-repeat ;backgroundSize:10px">
+  <div style="margin-top:30px;background-color:white">
     <div class="c-box bg-box" >
-      <div class="login-box clearfix"style="margin-top:10px">
+      <div class="login-box clearfix">
 
         <div class="fr form-box">
           <div class="tab">
@@ -41,7 +41,7 @@
             </form>
           </div>
 
-          <p class="form-p">已有账号？ <router-link :to="'/app/login'">[立即登录]</router-link></p>
+
         </div>
       </div>
     </div>
@@ -76,20 +76,24 @@ export default{
         username:that.email ,
         code:that.code,
       }).then((response)=> {
-        cookie.setCookie('name',response.data.username,7);
-        cookie.setCookie('token',response.data.token,7)
+
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem('username', that.email);
+        console.log(response.data.token);
+        console.log(that.email);
         //存储在store
         // 更新store数据
-        that.$store.dispatch('setInfo');
+        //that.$store.dispatch('setInfo');
         //跳转到首页页面
-        this.$router.push('/index')
+        that.$router.push('/helloHome');
       })
         .catch(function (error) {
           that.error.email = error.email?error.username[0]:'';
-          that.error.mobile = error.username?error.username[0]:'';
           that.error.password = error.password?error.password[0]:'';
-          that.error.username = error.mobile?error.mobile[0]:'';
           that.error.code = error.code?error.code[0]:'';
+          that.$alert('注册失败！', '', {
+            confirmButtonText: '确定',
+          });
         });
     },
     seedMessage(){
@@ -126,15 +130,17 @@ export default{
 }
 .c-box{
   width:100%;
+  background-color: white;
   min-width: 1190px;
   overflow:hidden;
 }
 .bg-box{
-  background:url(../../../static/register/paste2.jpg) no-repeat center center;
+  background:url(../../../static/register/back_b.jpeg)  center center;
+  background-size: 100%;
 }
 .login-box{
   width:853px;
-  margin:0px auto;
+  margin:150px 100px 50px 100px;
 }
 .clearfix::after {
   clear: both;

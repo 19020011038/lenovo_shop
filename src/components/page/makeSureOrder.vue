@@ -97,6 +97,8 @@ export default {
 
     getdate(){
       axios.get(url_path+'order_goods/?order_id='+this.order_id).then(res=>{
+        console.log("in make sure")
+        console.log(res.data);
         for(let i = 0; i < res.data.results.length; i ++ )
         {
           this.tableData.push({"name":res.data.results[i].goods.name, "price":res.data.results[i].goods.price, "img":res.data.results[i].goods.goods_front_image, "nums":res.data.results[i].goods_num})

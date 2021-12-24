@@ -24,7 +24,6 @@
         <div class="register-btn">
           <el-button type="primary" @click="submitRegister()">注册</el-button>
         </div>
-        <p class="login-tips">Tips : 用户名和密码随便填。</p>
       </el-form>
     </div>
   </div>

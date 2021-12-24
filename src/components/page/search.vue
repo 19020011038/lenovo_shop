@@ -4,9 +4,10 @@
     <el-header height="200px">
     <el-tag  style="margin-left:50px;margin-top: 100px" size="medium" >搜索内容:{{this.search}}</el-tag><br>
     </el-header>
+
     <div style="float: left;width: 80%;">
       <div class="card" v-for="(item, index) in tableData" :key="item.id" v-on:mouseenter="showDialog(item.goods_sn)"
-           v-on:mouseleave="hideDialog()">
+           v-on:mouseleave="hideDialog()" @click="goGoodsDesc(item.goods_sn)">
         <div class="ribbon">
           <!--鼠标移入移出事件-->
           <div class="handleDialog" v-if="item.goods_sn === show_id">

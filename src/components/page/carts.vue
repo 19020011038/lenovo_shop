@@ -256,8 +256,12 @@ export default {
       }).then(res=>{
         if(res.status === 201)
         {
+          console.log(res.data)
           this.order_id = res.data.id;
           this.$message('结算成功');
+          console.log("1111111");
+          console.log(this.order_id);
+
           this.goMakeSureOrder(this.order_id);
         }
       }).catch(error=>{
@@ -294,29 +298,35 @@ export default {
       let flag = true;
       for(let i = 0; i < this.multipleSelection.length; i ++ )
       {
-        axios.put(url_path+'shopcarts/'+this.multipleSelection.goods_id+'/', {nums:this.multipleSelection.nums, goods:this.multipleSelection.goods_id, is_choosen: false}).then(res => {
+        axios.put(url_path+'shopcarts/'+this.multipleSelection[i].goods_id+'/', {goods_num:this.multipleSelection[i].nums, goods:this.multipleSelection[i].goods_id, is_choosen: false}).then(res => {
           if (res.status === 200){
+            if(i === this.multipleSelection.length-1){
+              if(flag){
+                let mount = 0;
+                for (let i = 0; i < this.multipleSelection.length; i ++ )
+                {
+                  mount = mount + (parseFloat(this.multipleSelection[i].price)*parseFloat(this.multipleSelection[i].nums)).toFixed(2)
+                }
+                this.post_order('暂无留言', mount);
+              }
+              else
+              {
+                this.$alert('结算失败！', '', {
+                  confirmButtonText: '确定',
+                });
+                this.$router.go(0)
+              }
 
+            }
           }
         }).catch(err => {
           flag = false;
+
         })
+
       }
-      if(flag){
-        let mount = 0;
-        for (let i = 0; i < this.multipleSelection.length; i ++ )
-        {
-          mount = mount + (parseFloat(this.multipleSelection[i].price)*parseFloat(this.multipleSelection[i].nums)).toFixed(2)
-        }
-        this.post_order('暂无留言', mount);
-      }
-      else
-      {
-        this.$alert('结算失败！', '', {
-          confirmButtonText: '确定',
-        });
-        this.$router.go(0)
-      }
+
+
     },
 
     jiesuan_all(){
@@ -350,6 +360,7 @@ export default {
 
     getdate() {
       axios.get(url_path + 'shopcarts/').then(res => {
+        console.log(res);
         for (let i = 0; i < res.data.results.length; i++) {
           if(res.data.results[i].is_choosen)
           {

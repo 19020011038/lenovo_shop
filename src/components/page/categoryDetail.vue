@@ -1,16 +1,17 @@
 <template>
 
 <div>
-
+<!--  <el-button @click="goGoodsDesc('100009')">hello</el-button>-->
 <el-container>
   <el-header>
   <el-tag  style="margin-left:50px;margin-top: 70px" size="700px">{{ this.category_name }}</el-tag><br>
+
 <!--  <h1>{{this.category_name}}</h1>-->
   </el-header>
   <el-main>
   <div style="float: left;width: 80%;">
     <div class="card" v-for="(item, index) in tableData" :key="item.id" v-on:mouseenter="showDialog(item.goods_sn)"
-         v-on:mouseleave="hideDialog()">
+         v-on:mouseleave="hideDialog()" @click="goGoodsDesc(item.goods_sn)">
       <div class="ribbon">
         <!--鼠标移入移出事件-->
         <div class="handleDialog" v-if="item.goods_sn === show_id">
