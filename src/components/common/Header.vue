@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div class="header" style="background-color: #00d1b2">
     <!-- 前往主页按钮 -->
     <router-link to="/" style="color: #F2F8FE">
 
@@ -7,7 +7,7 @@
         <div class="collapse-btn">
           <i class="el-icon-s-home"></i>
         </div>
-        <img style="width: 70px;height: 50px;margin-top: 10px;" src="../../assets/img/logo.png">
+        <img style="width: 100px;height: 34px;margin-top: 15px;" src="../../assets/img/lenovo.jpg">
       </div>
 <!--      <div class="logo"><img src="../../assets/img/logo.png"></div>-->
 
@@ -21,6 +21,14 @@
 <!--            <i class="el-icon-rank"></i>-->
 <!--          </el-tooltip>-->
 <!--        </div>-->
+        <!-- 贴吧 -->
+        <div class="btn-bell">
+          <el-tooltip effect="dark" content="贴吧" placement="bottom">
+            <router-link to="/notes">
+              <i class="el-icon-s-comment"  style="color: #F2F8FE;"></i>
+            </router-link>
+          </el-tooltip>
+        </div>
         <!-- 我的购物车 -->
         <div class="btn-bell">
           <el-tooltip effect="dark" content="我的购物车" placement="bottom">
@@ -180,7 +188,7 @@
     width: 100%;
     height: 70px;
     font-size: 22px;
-    color: #fff;
+    color: #0000ff;
   }
   .collapse-btn {
     float: left;

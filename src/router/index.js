@@ -5,6 +5,9 @@ import HelloWorld from '@/components/HelloWorld'
 Vue.use(Router)
 
 export default new Router({
+// 加入代码
+
+
   routes: [
     {
       path: '/',
@@ -19,6 +22,11 @@ export default new Router({
           path: '/helloHome',
           component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/index.vue'),
           meta: { title: '首页' }
+        },
+        {
+          path: '/notes',
+          component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/notes.vue'),
+          meta: { title: '贴吧' }
         },
         {
           path: '/goodsDesc',

@@ -1,37 +1,41 @@
 <template>
-  <div>
+  <div style="background-color: #e1f3d8">
 
 
-    <el-carousel :interval="4000" type="card" height="400px" style="background: #F2F8FE">
-      <el-carousel-item v-for="item in imageList":key="item.address">
-        <img :src="item.address" @click="goGoodsDesc(item.id)">
-      </el-carousel-item>
-    </el-carousel>
     <br>
     <el-container>
-      <div style="float: left;width: 25%;">
+      <div style="float: left;width: 100px;">
         <!--左边栏空白占位  -->
       </div>
       <!--      <el-cascader-panel :options="options" style="width: 19%;background: #F2F8FE;"></el-cascader-panel>-->
-      <div style="float: left;width: 50%;">
-        <el-input placeholder="查询商品" v-model="selectd" class="input-with-select" size="1000px">
+      <div style="float: left;width: 500px;">
+        <el-input placeholder="查询商品" v-model="selectd" class="input-with-select" size="500px">
           <el-button slot="append" icon="el-icon-search" @click="getsearch()"></el-button>
         </el-input>
       </div>
     </el-container>
-
     <br>
 
+    <el-carousel :interval="4000" type="card" height="350px" style="background: #F2F8FE; width: 1300px; margin-left: 100px">
+      <el-carousel-item v-for="item in imageList":key="item.address">
+        <img :src="item.address" @click="goGoodsDesc(item.id)">
+      </el-carousel-item>
+    </el-carousel>
 
-    <el-container>
+    <div style="height: 15px; background-color: #f9f2f4; margin-top: 25px">
+    </div>
+
+
+
+
+    <el-container style="margin-left: 100px; margin-top: 0px">
       <el-header>
       </el-header>
     <el-row v-for="cla in index_show_list" :key="cla.name">
 
+      <el-button style="height: 50px; width: 150px;" @click="goCategoryDetail(cla.name)" type="warning" plain >{{ cla.name }}</el-button>
 
-      <el-tag @click="goCategoryDetail(cla.name)" style="margin-left:50px;margin-top: 70px" size="700px" v-on:mouseenter="showDialog(cla.name)" v-on:mouseleave="hideDialog()">{{ cla.name }}</el-tag><br>
-
-      <div style="float: left;width: 80%;">
+      <div style="float: left;width: 100%; margin-bottom: 75px">
         <div class="card"  v-for="(item, index) in cla.list" :key="item.id" v-on:mouseenter="showDialog(item.goods_sn)" v-on:mouseleave="hideDialog()">
           <div class="ribbon">
             <!--鼠标移入移出事件-->
@@ -40,8 +44,7 @@
 <!--              <el-button type="warning" icon="el-icon-star-off" circle size="medium"></el-button>-->
             </div>
             <img :src="item.goods_front_image" style="height: 100%;width: 100%">
-            <div class="wrap"><span class="ribbon6" style="color:#000;"><span style="color: #F2F8FE">双十一狂欢{{item.goods_sn}}号</span></span>
-            </div>
+
           </div>
           <div style="text-align:center">
             <span>{{item.name}}</span>
@@ -50,10 +53,14 @@
           </div>
 
         </div>
+
+
       </div>
+
       <br><br>
+
     </el-row>
-      <br><br>
+      <br ><br>
       <el-footer></el-footer>
 
     </el-container>
@@ -220,12 +227,15 @@ export default {
     },
     //前往商品详情页
     goGoodsDesc(goods) {
+
+
       this.$router.push({
         path:'/goodsDesc',
         query:{
           goods:goods
         }
       });
+
     },
     //显示操作项
     showDialog(show_id) {

@@ -1,5 +1,5 @@
 <template >
-  <div style="">
+  <div style="background-color: #e1f3d8">
     <div class="goodsBox">
       <div class="goodsBox-img">
         <el-image
@@ -169,6 +169,7 @@ import url_path from "../../../config/url_path";
 
 export default {
   name: "goodsDesc",
+  refresh_num: false,
   data() {
     return {
       activeName: 'second',
@@ -176,8 +177,8 @@ export default {
       goods_brief:'这是一款笔记本',
       price:123.00,
       goods_num:10,
-      goods_front_image:'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1296012258,3994659249&fm=26&gp=0.jpg',
-      detail_image:'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1296012258,3994659249&fm=26&gp=0.jpg',
+      goods_front_image:'',
+      detail_image:'',
       ship_free:true,
       goods_sn:0,
       click_num:0,
@@ -236,6 +237,7 @@ export default {
     this.goodsId = this.$route.query.goods;
     this.getdate();
     this.getAddress();
+
   },
 
   methods: {

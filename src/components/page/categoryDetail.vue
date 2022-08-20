@@ -1,10 +1,10 @@
 <template>
 
-<div>
+<div style="background-color: #e1f3d8">
 <!--  <el-button @click="goGoodsDesc('100009')">hello</el-button>-->
 <el-container>
   <el-header>
-  <el-tag  style="margin-left:50px;margin-top: 70px" size="700px">{{ this.category_name }}</el-tag><br>
+    <el-button style="height: 50px; width: 150px; margin-left:50px;margin-top: 25px; margin-bottom: 75px" @click="goCategoryDetail(cla.name)" type="warning" plain >{{ this.category_name }}</el-button>
 
 <!--  <h1>{{this.category_name}}</h1>-->
   </el-header>
@@ -21,9 +21,7 @@
 <!--          <el-button type="warning" icon="el-icon-star-off" circle size="medium"></el-button>-->
         </div>
         <img :src="item.goods_front_image" style="height: 100%;width: 100%">
-        <div class="wrap"><span class="ribbon6" style="color:#000;"><span
-          style="color: #F2F8FE">双十一狂欢{{ item.goods_sn }}号</span></span>
-        </div>
+
       </div>
       <div style="text-align:center">
         <span>{{ item.name }}</span>
